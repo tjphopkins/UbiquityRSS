@@ -1,23 +1,25 @@
+from dateparser import parse as parse_date_string
+
 from ubiquityRSS import db
 
 
 class Entry(db.Document):
-    rss_id = db.StringField(required=True, primary_key=True)
+    id = db.StringField(required=True, primary_key=True)
     author = db.StringField(required=True)
     link = db.StringField(required=True)
-    # really gross, should store 'published' as a DateTime field:
-    published = db.StringField(required=True)
+    published = db.DateTimeField(required=True)
     title = db.StringField(required=True)
     summary = db.StringField(required=True)
-    favourited = db.BoolField(default=False)
+    favourited = db.BooleanField(default=False)
 
     @staticmethod
-    def get_or_create(rss_id, author, link, published, title, summary):
+    def get_or_create(id, author, link, published, title, summary):
         try:
-            entry = Entry.objects.get(rss_id=rss_id)
+            entry = Entry.objects.get(id=id)
         except Entry.DoesNotExist:
+            published = parse_date_string(published)
             entry = Entry(
-                rss_id=rss_id, author=author, link=link, published=published,
+                id=id, author=author, link=link, published=published,
                 title=title, summary=summary)
             entry.save()
         finally:
