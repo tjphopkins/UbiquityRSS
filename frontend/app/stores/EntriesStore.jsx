@@ -22,7 +22,6 @@ var EntriesStore = assign({}, EventEmitter.prototype, {
     // Method for components to register their listener function for the change
     // event
     addChangeListener: function(callback) {
-        console.log("callback", callback);
         this.on(CHANGE_EVENT, callback);
     },
 

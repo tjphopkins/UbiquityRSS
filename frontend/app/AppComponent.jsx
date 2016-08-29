@@ -5,6 +5,7 @@ var React = require('react');
 
 var EntriesStore = require('./stores/EntriesStore')
 var EntryComponent = require('./EntryComponent');
+var SearchComponent = require('./SearchComponent');
 
 
 var getStateFromStores = function() {
@@ -37,20 +38,36 @@ var AppComponent = React.createClass({
         }
     },
 
+    filterEntries: function(filterText) {
+        this.setState({
+            filterText: filterText.toLowerCase()
+        });
+    },
+
+    _isFilteredOut: function(entry) {
+        if (this.state.filterText) {
+            return entry.title.toLowerCase().indexOf(this.state.filterText) < 0
+        } else {
+            return false
+        }
+    },
+
     render: function() {
 
         var entriesToRender = [];
         for (var entry of this.state.entries) {
             // Only display the 10 latest entries
-            if (entriesToRender.length <= 9) {
+            if (entriesToRender.length <= 9 && !this._isFilteredOut(entry)) {
                 entriesToRender.push(
-                    <EntryComponent entry={entry} />
+                    <EntryComponent entry={entry} key={entry.id} />
                 );
             }
         }
 
         return (
             <div>
+                <SearchComponent filterEntries={this.filterEntries}
+                     numberEntries={this.state.entries.length} />
                 {entriesToRender}
             </div>
         );
