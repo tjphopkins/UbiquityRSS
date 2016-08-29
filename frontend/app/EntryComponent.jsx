@@ -2,6 +2,8 @@
 
 var React = require('react');
 
+var UIActions = require('./actions/UIActions')
+
 var EntryComponent = React.createClass({
 
     propTypes: {
@@ -16,6 +18,10 @@ var EntryComponent = React.createClass({
         }).isRequired,
     },
 
+    favouriteEntry: function() {
+        UIActions.markAsFavourite(this.props.entry.id);
+    },
+
     createMarkup: function(html) {
         return {__html: html};
     },
@@ -23,7 +29,12 @@ var EntryComponent = React.createClass({
     render: function() {
         var favourited = null;
         if (this.props.entry.favourited) {
-            favourited = <h2>'Favourited'</h2>;
+            favourited = <h2>Favourited</h2>;
+        }
+        else {
+            favourited = <button onClick={this.favouriteEntry}>
+                    Favourite Entry
+                </button>
         }
 
         // Never dangerouslySetInnerHTML in real life

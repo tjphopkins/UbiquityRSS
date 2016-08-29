@@ -1,6 +1,6 @@
 import json
 
-from flask import Flask, render_template
+from flask import Flask, request, render_template
 from flask_mongoengine import MongoEngine
 import feedparser
 
@@ -48,13 +48,22 @@ def _fetch_and_parse_feed(url='https://www.theguardian.com/uk/technology/rss'):
 # (I'd usually give these their own file and create an interal api for accessing
 # and altering db documents, but since this is a small app, I'll leave this
 # all in here)
+
 @app.route('/')
 def index():
-    """Renders the app template which initialises the React application."""
     config = {
         'entries': _fetch_and_parse_feed()
     }
     return render_template('index.html', config=json.dumps(config))
+
+
+@app.route('/mark_entry_favourite', methods=['POST'])
+def mark_entry_favourite():
+    from ubiquityRSS.documents import Entry
+    # TODO: Add POST params validaiton here
+    entry = Entry.objects.get(id=request.form['id'])
+    entry.mark_favourite()
+    return json.dumps({'success': True})
 
 
 if __name__ == '__main__':

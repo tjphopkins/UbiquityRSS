@@ -27,16 +27,16 @@ var AppComponent = React.createClass({
     },
 
     componentWillUnmount: function() {
-        EntriesStore.removeChandwdgeListener(this._onChange);
+        EntriesStore.removeChangeListener(this._onChange);
     },
 
     _onChange: function() {
-            var newState = getStateFromStores();
-            if (! _.isEqual(newState, this.state)) {
-                this.setState(newState);
-            }
+        var newState = getStateFromStores();
+        if (! _.isEqual(newState, this.state)) {
+            this.setState(newState);
+        }
+    },
 
-        },
     render: function() {
 
         var entriesToRender = [];
