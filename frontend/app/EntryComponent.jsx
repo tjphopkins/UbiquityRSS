@@ -16,20 +16,24 @@ var EntryComponent = React.createClass({
         }).isRequired,
     },
 
+    createMarkup: function(html) {
+        return {__html: html};
+    },
+
     render: function() {
         var favourited = null;
         if (this.props.entry.favourited) {
             favourited = <h2>'Favourited'</h2>;
         }
 
+        // Never dangerouslySetInnerHTML in real life
         return (
             <div className="entry">
-                <a href={this.props.entry.linl}>
-                    <h1>{this.props.entry.title}</h1>
-                </a>
+                <h1>{this.props.entry.title}</h1>
                 <h2>{this.props.entry.author}</h2>
                 <h3>{this.props.entry.published}</h3>
-                <p>{this.props.entry.summary}</p>
+                <p dangerouslySetInnerHTML={
+                    this.createMarkup(this.props.entry.summary)} />
                 {favourited}
             </div>
         );
