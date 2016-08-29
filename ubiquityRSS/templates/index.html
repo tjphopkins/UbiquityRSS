@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css"
+ href={{ url_for('static', filename='style.css') }}>
+<title>Ubiquity RSS</title>
+</head>
+
+<body>
+<div class='feed-container'></div>
+<script type="text/javascript" src={{ url_for('static', filename='app.js') }}></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            window.RSSFeed = new RSSFeed.init(
+                document.getElementsByClassName('feed-container')[0],
+                {{ config|safe }}
+            );
+        });
+    </script>
+</body>
+
+</html>
