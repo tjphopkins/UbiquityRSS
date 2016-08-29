@@ -1,1 +1,1 @@
-# UbiquityRSS
+# ubiquityRSS
